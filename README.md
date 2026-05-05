@@ -1,14 +1,29 @@
-# Summary: Flickr30k Modality Gap Architecture and Results
+# Summary of Multi-Modal Architectures and Modality Gap Analysis
 
-## 📊 Metrics Overview
-*   **Centroid Distance (↓):** Measures the overall "modality gap" by calculating the distance between the average image embedding and the average text embedding. 
-*   **Paired Cosine Similarity (↑):** Measures how closely matching image-text pairs align in the embedding space.
-*   **JS Divergence (↓):** Measures the statistical difference in the shape and spread of the image distribution versus the text distribution.
-*   **k-NN Mixing Rate (↑):** Measures how well the two modalities interleave at a local level (0 means embeddings are completely isolated with their own modality).
+This document summarizes four architectural configurations tested on the Flickr30k dataset to analyze the "modality gap" between image and text embeddings. 
+
+## 1. Model Architectures
+
+### CLIP Pre-trained
+*   **Architecture:** Dual encoder using Vision Transformer (ViT-B/32) for images and a 12-layer Transformer for text. Uses the final projection-layer outputs.
+*   **Training:** Contrastive learning on ~400M image-text pairs (WIT dataset). ~150M parameters.
+
+### Dual Encoder From Scratch (Baseline)
+*   **Architecture:** Two completely independent 3-layer MLP sub-encoders. Images are tokenized via KMeans (65 vocab), and text via ASCII characters (128 vocab). 
+*   **Capacity:** Hidden dimension of 167 to match the parameter count of Option B.
+*   **Training:** Trained from scratch on 8,000 Flickr30k pairs using InfoNCE loss. Shares *zero* parameters between modalities.
+
+### Option B — Shared Token Encoder
+*   **Architecture:** A single, shared 3-layer MLP encoder (hidden dimension 256) processes both image and text tokens using a unified vocabulary of 193 tokens.
+*   **Training:** Identical hyper-parameters and data to the Dual Encoder. Forces both modalities into a unified representation space.
+
+### TinyCLIP From Scratch
+*   **Architecture:** A miniature clone of CLIP (ViT + Transformer dual encoders).
+*   **Training:** Trained from scratch strictly on the 8k Flickr30k pairs to isolate architecture from pre-training scale.
 
 ---
 
-## 📈 Performance Results
+## 2. Experimental Results (Flickr30k)
 
 | Model | Centroid Distance ↓ | Paired Cosine ↑ | JS Divergence ↓ | k-NN Mixing ↑ |
 | :--- | :--- | :--- | :--- | :--- |
@@ -17,19 +32,17 @@
 | **Option B Shared** | 0.384 | 0.874 | 0.075 | 0.002 |
 | **TinyCLIP Scratch** | 1.068 | 0.393 | 0.220 | 0.000 |
 
----
-
-## 🧠 Model Breakdown & Analysis
-
-*   **CLIP Pre-trained (final):** The standard, off-the-shelf model trained on 400M pairs. Despite massive training, it exhibits a clear modality gap (centroid: 0.806). The low JS divergence indicates the text and image distributions have similar shapes, but are simply translated away from one another.
-*   **Dual Encoder From Scratch:** Trained on just 8k pairs with separate encoders for images and text (zero shared weights). It produces a centroid gap (0.761) nearly identical to the massive CLIP model. This proves the modality gap is persistent and not primarily caused by insufficient data or capacity.
-*   **Option B — Shared Token Encoder:** The core thesis model. It uses the exact same data, tokenization, and capacity as the Dual Scratch model, but relies on a **single shared embedding table and MLP** for both modalities. This architectural shift cuts the centroid distance by ~50% (0.384) and significantly boosts paired similarity.
-*   **TinyCLIP From Scratch:** A miniature ViT+Transformer clone of CLIP trained on 8k pairs. It yielded the worst results, though the findings are inconclusive; it is unclear if the failure is due to the ViT architecture naturally producing a wider gap, or simply because ViTs require far more data than 8,000 pairs to properly converge.
+### Key Metrics Explained
+*   **Centroid Distance:** Distance between the average image embedding and average text embedding (measures the modality gap).
+*   **Paired Cosine Similarity:** How close matching image-text pairs are.
+*   **JS Divergence:** Differences in the overall statistical distribution of the two modalities.
+*   **k-NN Mixing Rate:** The fraction of a point's nearest neighbors that belong to the *other* modality.
 
 ---
 
-## 🎯 Key Takeaways
+## 3. Core Conclusions
 
-1.  **The Modality Gap is Persistent:** Scaling up data and model parameters does not inherently make the gap go away. Massive models (CLIP) and tiny separated models (Dual Scratch) suffer from nearly identical centroid distances.
-2.  **Weight Sharing is the Differentiator:** Forcing both modalities through the same learned representations (Option B) is a proven architectural method to significantly shrink the modality gap. 
-3.  **Reduction ≠ Elimination:** Even when the gap is halved via weight sharing (Option B), the k-NN mixing rate stays near zero. The two modality clouds are relocated much closer together, but they still remain clearly distinguishable and separated in their local neighborhoods.
+1.  **The Modality Gap is Persistent:** Standard CLIP (trained on 400M pairs) and the Dual Scratch model (trained on 8k pairs) produce nearly identical centroid distances (~0.80). Scaling up data and model size does not naturally eliminate the gap.
+2.  **Weight Sharing is the Key Variable:** Option B (Shared Encoder) reduced the centroid distance by roughly 50% compared to the Dual Scratch baseline while drastically improving paired cosine similarity. This proves that shared architecture, rather than data capacity, fundamentally alters the geometry of the gap.
+3.  **Reduction is Not Elimination:** Despite the centroids moving much closer in Option B, the k-NN mixing rate remains near zero across all models. This indicates that while the overall modality clouds are drawn closer together, they remain locally separated and distinguishable in the embedding space.
+4.  **TinyCLIP Underperformed:** The TinyCLIP model had the worst centroid gap and paired cosine. However, because ViTs are highly data-hungry, it is difficult to determine whether this failure is due to the dual-transformer architecture itself or simply undertraining on a small (8k) dataset.
