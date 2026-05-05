@@ -1,0 +1,52 @@
+{
+  "CLIP Pre-trained (final)": {
+    "centroid_distance": 0.8061366677284241,
+    "kappa_image": 242678290.95939863,
+    "kappa_text": 5829674799.554637,
+    "alpha_image": 1.443843541253375,
+    "alpha_text": 1.580132677217547,
+    "js_divergence": 0.021053845832047474,
+    "knn_mixing_rate": 0.0,
+    "paired_cosine_sim": 0.3108329474925995
+  },
+  "CLIP Pre-trained (token)": {
+    "centroid_distance": 1.3065342903137207,
+    "kappa_image": 248040971.73602152,
+    "kappa_text": 2870939129.1370106,
+    "alpha_image": 1.4895056995548834,
+    "alpha_text": 1.577245587616088,
+    "js_divergence": 0.6819573680236751,
+    "knn_mixing_rate": 0.0,
+    "paired_cosine_sim": -0.06239746883511543
+  },
+  "Dual Encoder (scratch)": {
+    "centroid_distance": 0.760521411895752,
+    "kappa_image": 3154445.9527500994,
+    "kappa_text": 16438956696.675642,
+    "alpha_image": 2.371040776437092,
+    "alpha_text": 3.504196984467536,
+    "js_divergence": 0.0019593660615486713,
+    "knn_mixing_rate": 8.333333333333334e-06,
+    "paired_cosine_sim": 0.6679866909980774
+  },
+  "Option B Shared Enc": {
+    "centroid_distance": 0.38461804389953613,
+    "kappa_image": 16884407.627689444,
+    "kappa_text": 3922284916.2417064,
+    "alpha_image": 2.743227356080842,
+    "alpha_text": 3.536281533071962,
+    "js_divergence": 0.07531400307614393,
+    "knn_mixing_rate": 0.001566666666666667,
+    "paired_cosine_sim": 0.8738628029823303
+  },
+  "TinyCLIP (scratch Flickr)": {
+    "centroid_distance": 1.0680806636810303,
+    "kappa_image": 5242794854.685944,
+    "kappa_text": 71278494833.11922,
+    "alpha_image": 3.3857232949401888,
+    "alpha_text": 3.1810973529511672,
+    "js_divergence": 0.2199149056982048,
+    "knn_mixing_rate": 0.0,
+    "paired_cosine_sim": 0.3933580219745636
+  }
+}

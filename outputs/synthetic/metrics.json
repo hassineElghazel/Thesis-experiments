@@ -1,0 +1,42 @@
+{
+  "CLIP Pre-trained (final)": {
+    "centroid_distance": 1.0218230485916138,
+    "kappa_image": 30830530108.294697,
+    "kappa_text": 69156747492.16588,
+    "alpha_image": 6.3137538459551825,
+    "alpha_text": 1.9700378823851243,
+    "js_divergence": 0.43285921880693334,
+    "knn_mixing_rate": 0.0,
+    "paired_cosine_sim": 0.3367564380168915
+  },
+  "CLIP Pre-trained (token)": {
+    "centroid_distance": 1.3791834115982056,
+    "kappa_image": 16760752889.876184,
+    "kappa_text": 54195452015.666016,
+    "alpha_image": 5.992352801220614,
+    "alpha_text": 2.2653145217887096,
+    "js_divergence": 0.6301335039719858,
+    "knn_mixing_rate": 0.0,
+    "paired_cosine_sim": -0.09777797758579254
+  },
+  "Dual Encoder (scratch)": {
+    "centroid_distance": 0.08130010962486267,
+    "kappa_image": 279381220334.6799,
+    "kappa_text": 310651781030.1198,
+    "alpha_image": 5.675064887914343,
+    "alpha_text": 5.415439623173073,
+    "js_divergence": 0.09761413677056699,
+    "knn_mixing_rate": 0.013333333333333332,
+    "paired_cosine_sim": 0.9728217124938965
+  },
+  "Option B Shared Enc": {
+    "centroid_distance": 0.06475561112165451,
+    "kappa_image": 273574180273.7932,
+    "kappa_text": 319810095648.92426,
+    "alpha_image": 5.565726062111096,
+    "alpha_text": 5.287749168604061,
+    "js_divergence": 0.11621173529818148,
+    "knn_mixing_rate": 0.027222222222222224,
+    "paired_cosine_sim": 0.9836781620979309
+  }
+}
